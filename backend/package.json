@@ -1,0 +1,41 @@
+{
+  "name": "express-mesto",
+  "version": "1.0.0",
+  "description": "`/routes` — папка с файлами роутера",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SimaNazarova/express-mesto.git"
+  },
+  "keywords": [],
+  "author": "Sima Nazarova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SimaNazarova/express-mesto/issues"
+  },
+  "homepage": "https://github.com/SimaNazarova/express-mesto#readme",
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.7",
+    "webpack-cli": "^4.3.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "validator": "^13.5.2",
+    "bcryptjs": "^2.4.3",
+    "winston": "^3.3.3",
+    "mongoose": "^5.11.17",
+    "mongoose-unique-validator": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "express-winston": "^0.1.1",
+    "dotenv": "^8.2.0",
+    "celebrate": "^13.0.4"
+  }
+}
