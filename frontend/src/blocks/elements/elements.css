@@ -1,0 +1,9 @@
+.elements {
+  margin-top: 50px;
+}
+
+@media all and (max-width: 708px) {
+  .elements {
+    margin-top: 36px;
+  }
+}

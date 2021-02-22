@@ -1,0 +1,7 @@
+.element__image-name {
+  background-color: #ffffff;
+  border-radius: 0 0 10px 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}

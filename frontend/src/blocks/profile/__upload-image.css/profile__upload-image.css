@@ -1,0 +1,10 @@
+.profile__upload-image {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  opacity: 0;
+}
+
+.profile__upload-image:hover {
+  opacity: 1;
+}

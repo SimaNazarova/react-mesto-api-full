@@ -1,0 +1,45 @@
+.popup__save-button {
+  border: none;
+  /* max-width: 359px;
+  min-width: 358px; */
+  height: 50.15px;
+  background-color: #000000;
+  margin-top: 48px;
+  padding: 0;
+  color: #ffffff;
+  width: 100%;
+  font-size: 18px;
+  line-height: 1.22;
+}
+
+.popup__save-button:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.popup__save-button:disabled {
+  color: #000000;
+  background: #ffffff;
+  pointer-events: none;
+  border: 1px solid #000000;
+  opacity: 0.2;
+}
+
+@media all and (max-width: 506px) {
+  .popup__save-button {
+    max-width: 200px;
+    margin: 36px 20px 30px 20px;
+    height: 40px;
+    font-size: 14px;
+    line-height: 1.21;
+  }
+}
+
+@media all and (max-width: 320px) {
+  .popup__save-button {
+    margin: 36px 30px 30px 20px;
+    height: 40px;
+    font-size: 14px;
+    line-height: 1.21;
+  }
+}

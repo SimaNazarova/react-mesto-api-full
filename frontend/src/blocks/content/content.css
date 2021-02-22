@@ -1,0 +1,17 @@
+.content {
+  margin: 45px auto 0;
+  position: relative;
+  max-width: 882px;
+}
+
+@media all and (max-width: 770px) {
+  .content {
+    margin: 28px auto 0;
+  }
+}
+
+@media all and (max-width: 500px) {
+  .content {
+    margin: 19px auto 0;
+  }
+}

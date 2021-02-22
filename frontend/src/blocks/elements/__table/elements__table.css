@@ -1,0 +1,14 @@
+.elements__table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+  column-gap: 18px;
+  row-gap: 21px;
+  padding: 0;
+  margin: 0;
+}
+
+@media all and (max-width: 905px) {
+  .elements__table {
+    row-gap: 20px;
+  }
+}

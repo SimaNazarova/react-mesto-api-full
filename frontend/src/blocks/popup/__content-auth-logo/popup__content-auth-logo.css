@@ -1,0 +1,14 @@
+.popup__content-auth-logo {
+  margin-bottom: 60px;
+  margin-left: 155px;
+  margin-right: 155px;
+  margin-bottom: 0;
+}
+
+@media all and (max-width: 320px) {
+  .popup__content-auth-logo {
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-top: 50px;
+  }
+}

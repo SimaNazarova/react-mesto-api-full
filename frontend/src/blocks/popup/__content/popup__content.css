@@ -1,0 +1,11 @@
+@media all and (max-width: 506px) {
+  .popup__content {
+    max-width: 300px;
+  }
+}
+
+@media all and (max-width: 320px) {
+  .popup__content {
+    width: 280px;
+  }
+}

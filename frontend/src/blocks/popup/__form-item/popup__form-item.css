@@ -1,0 +1,19 @@
+.popup__form-item {
+  border: 0;
+  width: 100%;
+  height: 27.34px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  margin-top: 29.74px;
+  line-height: 1.21;
+}
+
+@media all and (max-width: 506px) {
+  .popup__form-item {
+    margin: 20px 20px 0 20px;
+    font-size: 12px;
+    line-height: 1.25;
+    max-width: 200px;
+  }
+}

@@ -1,0 +1,12 @@
+.header__menu {
+  margin-left: auto;
+  display: flex;
+}
+
+@media all and (max-width: 320px) {
+  .header__menu {
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+  }
+}

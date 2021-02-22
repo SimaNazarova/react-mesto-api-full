@@ -1,0 +1,13 @@
+.element {
+  max-width: 282px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+@media all and (max-width: 905px) {
+  .element {
+    margin: 0 auto;
+  }
+}

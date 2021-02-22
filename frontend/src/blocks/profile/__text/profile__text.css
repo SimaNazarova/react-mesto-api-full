@@ -1,0 +1,11 @@
+.profile__text {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+@media all and (max-width: 708px) {
+  .profile__text {
+    margin-top: 14px;
+  }
+}
