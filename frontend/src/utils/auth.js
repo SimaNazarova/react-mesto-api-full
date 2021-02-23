@@ -1,4 +1,4 @@
-export const BASE_URL = "https://auth.nomoreparties.co";
+export const BASE_URL = "http://api.sima.nazarova.students.nomoreparties.space";
 
 const checkResponse = (response) =>
   response.ok ? response.json() : Promise.reject(`${response.status}`);

@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && scp -r ./build/* sima-nazarova193@84.201.168.121:/home/sima-nazarova193/news-frontend"
+    "deploy": "npm run build && scp -r ./build/* sima-nazarova193@84.201.168.121:/home/sima-nazarova193/react-mesto-api-full/frontend/build"
   },
   "eslintConfig": {
     "extends": [

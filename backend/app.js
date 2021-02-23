@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const { errors } = require('celebrate');
+const cors = require('cors');
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
 const errorHandler = require('./middlewares/errorHandler');
@@ -36,6 +37,7 @@ const { PORT = 3000 } = process.env;
 //   next();
 // });
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

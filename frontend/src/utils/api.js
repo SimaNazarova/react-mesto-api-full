@@ -106,8 +106,11 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-17",
-  headers: "7425052a-c456-4fc7-a0e3-c6a41d33ee63",
+  baseUrl: "http://api.sima.nazarova.students.nomoreparties.space",
+  headers: {
+     authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "application/json",
+  },
 });
 
 export default api;
