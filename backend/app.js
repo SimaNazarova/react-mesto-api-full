@@ -30,15 +30,12 @@ mongoose.connection.on('open', () => console.log('DB is connected'));
 
 const { PORT = 3000 } = process.env;
 
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '60099ce5a7dc074534a80bcb',
-//   };
-//   next();
-// });
-
-// eslint-disable-next-line no-console
-console.log('work');
+app.use((req, res, next) => {
+  req.user = {
+    _id: '60099ce5a7dc074534a80bcb',
+  };
+  next();
+});
 
 app.use(cors());
 app.use(bodyParser.json());
