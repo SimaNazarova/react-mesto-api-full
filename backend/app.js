@@ -37,10 +37,8 @@ const { PORT = 3000 } = process.env;
 //   next();
 // });
 
-app.use(() => {
-  // eslint-disable-next-line no-console
-  console.log('work');
-});
+// eslint-disable-next-line no-console
+console.log('work');
 
 app.use(cors());
 app.use(bodyParser.json());
