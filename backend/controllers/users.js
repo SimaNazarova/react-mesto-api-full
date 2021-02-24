@@ -23,7 +23,7 @@ const getUser = (req, res, next) => {
 };
 
 const getCurrentUser = (req, res, next) => {
-  User.findById(req.user._id)
+  User.findById(req.user.userId)
     .orFail(() => { throw new NotFoundError('Нет пользователя c таким id'); })
     .then((user) => res.send({ user }))
     .catch((err) => next(err));
@@ -51,7 +51,6 @@ const createUser = (req, res, next) => {
       }))
     .catch(next);
 };
-
 
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;

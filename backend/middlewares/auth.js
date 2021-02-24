@@ -2,8 +2,6 @@ const jwt = require('jsonwebtoken');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const bearerToken = (header) => header.replace('Bearer ', '');
-
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
@@ -13,7 +11,7 @@ module.exports = (req, res, next) => {
       .send({ message: 'Необходима авторизация' });
   }
 
-  const token = bearerToken(authorization);
+  const token = authorization.replace('Bearer ', '');
   let payload;
 
   try {
