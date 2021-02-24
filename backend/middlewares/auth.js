@@ -3,25 +3,25 @@ const { Unauthorized } = require('../errors/errors');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
+const bearerToken = (header) => header.replace('Bearer ', '');
+
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new Unauthorized('Необходима авторизация');
+    throw new Unauthorized('Проблема с токеном');
   }
 
-  const token = authorization.replace('Bearer ', '');
+  const token = bearerToken(authorization);
   let payload;
 
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+    payload = jwt.verify(token, `${NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret'}`);
   } catch (err) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new Unauthorized('Необходима авторизация');
   }
 
-  req.user = payload; // записываем пейлоуд в объект запроса
+  req.user = payload;
 
-  next(); // пропускаем запрос дальше
+  next();
 };
