@@ -1,4 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
+const { BadRequest } = require('../errors/errors');
 
 const userValidation = celebrate({
   body: Joi.object().keys({
@@ -10,7 +12,12 @@ const userValidation = celebrate({
 const cardValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().pattern(/^https?:\/{2}(w{3}\.)?([\w.-\W]{1,})(\.)([a-z]{2,6})(\/?)([\w-.\W]*)/).required(),
+    link: Joi.string().required().custom((link) => {
+      if (!validator.isURL(link)) {
+        throw new BadRequest('Некорректная ссылка');
+      }
+      return link;
+    }),
   }),
 });
 
@@ -18,9 +25,14 @@ const userRegister = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(/^https?:\/{2}(w{3}\.)?([\w.-\W]{1,})(\.)([a-z]{2,6})(\/?)([\w-.\W]*)/),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(6),
+    link: Joi.string().custom((link) => {
+      if (!validator.isURL(link)) {
+        throw new BadRequest('Некорректная ссылка');
+      }
+      return link;
+    }),
   }),
 });
 
