@@ -23,7 +23,7 @@ const getUser = (req, res, next) => {
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => { throw new NotFoundError('Нет пользователя c таким id'); })
-    .then((user) => res.send({ user }))
+    .then((user) => res.send(user))
     .catch((err) => next(err));
 };
 
@@ -54,6 +54,7 @@ const createUser = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
+
   return User.findUserByCredentials(email, password)
     .then((user) => {
       if (user) {
@@ -62,10 +63,18 @@ const login = (req, res, next) => {
           NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
           { expiresIn: '7d' },
         );
-        res.send({ token });
+        res.send({
+          user: {
+            name: user.name,
+            about: user.about,
+            avatar: user.avatar,
+            email: user.email,
+          },
+          token,
+        });
       }
     })
-    .catch(next);
+    .catch(() => next(new Unauthorized('Неверный логин или пароль')));
 };
 
 module.exports = {
