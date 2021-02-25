@@ -20,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/mydb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
+  useUnifiedTopology: true,
 });
 
 // eslint-disable-next-line no-console
@@ -45,7 +46,7 @@ app.post('/signin', userValidation, login);
 app.use(errorLogger);
 app.use(errors());
 
-app.use((req, res) => {
+app.use('*', (req, res) => {
   res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
 });
 
