@@ -24,11 +24,12 @@ mongoose.connect('mongodb://localhost:27017/mydb', {
 });
 
 // eslint-disable-next-line no-console
-mongoose.connection.on('open', () => console.log('DB is connected'));
+// mongoose.connection.on('open', () => console.log('DB is connected'));
 
 app.use(cors());
-app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(requestLogger);
 
@@ -38,10 +39,13 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.use('/users', auth, usersRouter);
-app.use('/cards', auth, cardsRouter);
+
 app.post('/signup', userRegister, createUser);
 app.post('/signin', userValidation, login);
+
+app.use('/users', auth, usersRouter);
+app.use('/cards', auth, cardsRouter);
+
 
 app.use(errorLogger);
 app.use(errors());
