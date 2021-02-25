@@ -5,7 +5,7 @@ const {
   NotFoundError, Unauthorized, ConflictError, BadRequest,
 } = require('../errors/errors');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+// const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -22,7 +22,6 @@ const getUser = (req, res, next) => {
 
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => { throw new NotFoundError('Нет пользователя c таким id'); })
     .then((user) => res.send(user))
     .catch((err) => next(err));
 };
@@ -88,14 +87,22 @@ const updateAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
+  const { NODE_ENV, JWT_SECRET } = process.env;
+  User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' },
       );
-      res.send({ token });
+      res.send({
+        user: {
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          email: user.email,
+        },
+        token,
+      });
     })
     .catch(() => next(new Unauthorized('Неверный логин или пароль')));
 };
