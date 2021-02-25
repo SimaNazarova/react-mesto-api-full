@@ -46,14 +46,8 @@ const createUser = (req, res, next) => {
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     })
-      .then((user) => res.status(200).send({
-        user: {
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          email: user.email,
-        },
-      })))
+      .then((user) => res.status(200).send({ name: user.name, about: user.about, avatar: user.avatar, email: user.email,},
+      )))
     .catch((err) => next(err));
 };
 
@@ -69,11 +63,8 @@ const login = (req, res, next) => {
           { expiresIn: '7d' },
         );
         res.send({
-          user: {
-            name: user.name,
-            about: user.about,
-            avatar: user.avatar,
-            email: user.email,
+          {
+            name: user.name, about: user.about, avatar: user.avatar, email: user.email,
           },
           token,
         });
