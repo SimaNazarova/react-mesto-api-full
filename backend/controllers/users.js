@@ -2,10 +2,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const {
-  NotFoundError, Unauthorized, ConflictError, BadRequest,
+  NotFoundError, ConflictError, BadRequest,
 } = require('../errors/errors');
 
-// const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -87,25 +87,20 @@ const updateAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  const { NODE_ENV, JWT_SECRET } = process.env;
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' },
-      );
-      res.send({
-        user: {
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          email: user.email,
-        },
-        token,
-      });
+      if (user) {
+        const token = jwt.sign(
+          { _id: user._id },
+          NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+          { expiresIn: '7d' },
+        );
+        res.send({ token });
+      }
     })
-    .catch(() => next(new Unauthorized('Неверный логин или пароль')));
+    .catch(next);
 };
+
 
 module.exports = {
   getUsers,

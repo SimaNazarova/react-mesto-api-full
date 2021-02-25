@@ -5,6 +5,6 @@ const {
 
 router.get('/', getUsers);
 router.get('/me', getCurrentUser);
-router.get('/:_id', getUser);
+router.get('/:id', getUser);
 
 module.exports = router;
