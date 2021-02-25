@@ -1,29 +1,18 @@
 const express = require('express');
-
 const mongoose = require('mongoose');
-
 const bodyParser = require('body-parser');
-
 const cors = require('cors');
-
 const { errors } = require('celebrate');
-
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
 const auth = require('./middlewares/auth');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const { login, createUser } = require('./controllers/users.js');
-
 const errorHandler = require('./middlewares/errorHandler');
-
 const { userValidation, userRegister } = require('./middlewares/validation');
-
 require('dotenv').config();
 
-
 const app = express();
-
 const { PORT = 3000 } = process.env;
 
 // подключаемся к серверу mongo
