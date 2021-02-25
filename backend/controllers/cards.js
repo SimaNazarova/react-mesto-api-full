@@ -26,7 +26,8 @@ const deleteCards = (req, res, next) => {
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Карточка не удалена');
-      }});
+      }
+    });
   Card.findByIdAndRemove(req.params.id)
     .orFail(() => { throw new NotFoundError('Нет карточки c таким id'); })
     .then(() => res.send({ message: 'удалено' }))
