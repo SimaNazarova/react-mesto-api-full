@@ -46,14 +46,16 @@ const createUser = (req, res, next) => {
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     })
-      .then((user) => res.status(200).send({ name: user.name, about: user.about, avatar: user.avatar, email: user.email,},
-      )))
-    .catch((err) => next(err));
+      .then(({ _id }) => {
+        res.status(200).send({
+          _id, email, name, avatar, about,
+        });
+      }))
+    .catch(next);
 };
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       if (user) {
@@ -62,15 +64,10 @@ const login = (req, res, next) => {
           NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
           { expiresIn: '7d' },
         );
-        res.send({
-          {
-            name: user.name, about: user.about, avatar: user.avatar, email: user.email,
-          },
-          token,
-        });
+        res.send({ token });
       }
     })
-    .catch(() => next(new Unauthorized('Неверный логин или пароль')));
+    .catch(next);
 };
 
 module.exports = {
