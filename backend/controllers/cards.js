@@ -22,48 +22,42 @@ const postCards = (req, res, next) => {
 };
 
 const deleteCards = (req, res, next) => {
-  Card.findById(req.params.id)
+  const { cardId } = req.params;
+  const owner = req.user._id;
+  Card.findById(cardId)
+    .orFail(() => { throw new NotFoundError('Карточка не найдена'); })
     .then((card) => {
-      if (card.owner.toString() !== req.user._id) {
-        throw new ForbiddenError('Карточка не удалена');
+      if (card.owner.toString() !== owner) {
+        throw new ForbiddenError('Вы не можете удалить карточку');
       }
-    });
-  Card.findByIdAndRemove(req.params.id)
-    .orFail(() => { throw new NotFoundError('Нет карточки c таким id'); })
-    .then(() => res.send({ message: 'удалено' }))
-    .catch((err) => next(err));
+      return Card.findByIdAndRemove(cardId);
+    })
+    .then((card) => res.send(card))
+    .catch(next);
 };
 
 const likeCard = (req, res, next) => {
+  const { cardId } = req.params;
   Card.findByIdAndUpdate(
-    req.params.id,
-    { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+    cardId,
+    { $addToSet: { likes: req.user._id } },
     { new: true },
   )
     .orFail(() => { throw new NotFoundError('Нет карточки c таким id'); })
-    .then((card) => res.send({ data: card }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        throw new BadRequest('Переданы некорректные данные');
-      }
-    })
-    .catch((err) => next(err));
+    .then((card) => res.send(card))
+    .catch(next);
 };
 
 const dislikeCard = (req, res, next) => {
+  const { cardId } = req.params;
   Card.findByIdAndUpdate(
-    req.params.id,
-    { $pull: { likes: req.user._id } }, // убрать _id из массива
+    cardId,
+    { $pull: { likes: req.user._id } },
     { new: true },
   )
     .orFail(() => { throw new NotFoundError('Нет карточки c таким id'); })
-    .then((card) => res.send({ data: card }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        throw new BadRequest('Переданы некорректные данные');
-      }
-    })
-    .catch((err) => next(err));
+    .then((card) => res.send(card))
+    .catch(next);
 };
 
 module.exports = {
