@@ -30,6 +30,7 @@ const getCurrentUser = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+// создать нового юзера
 const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
@@ -74,6 +75,7 @@ const login = (req, res, next) => {
     .catch(() => next(new Unauthorized('Неправильные почта или пароль')));
 };
 
+// обновить данные
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
@@ -88,6 +90,7 @@ const updateUser = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+// обновить аватар
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
