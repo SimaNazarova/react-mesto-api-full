@@ -3,16 +3,18 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const {
   NotFoundError, Unauthorized, ConflictError,
-} = require('../errors/errors');
+} = require('../errors/allErrors');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
+// найти всех юзеров
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.send(users))
     .catch((err) => next(err));
 };
 
+// найти юзера по id
 const getUser = (req, res, next) => {
   User.findById(req.params.id)
     .orFail(() => { throw new NotFoundError('Нет пользователя c таким id'); })
@@ -20,6 +22,7 @@ const getUser = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+// получить данные текущего юзера
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => { throw new NotFoundError('Нет пользователя c таким id'); })
@@ -31,17 +34,23 @@ const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-
-  bcrypt.hash(password, 10)
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        throw new ConflictError('Данный email уже зарегистрирован');
+      }
+      return bcrypt.hash(password, 10);
+    })
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     }))
-    .then((user) => res.send({name: user.name, about: user.about, avatar: user.avatar, email: user.email,
+    .then((user) => res.send({
+      name: user.name, about: user.about, avatar: user.avatar, email: user.email,
     }))
     .catch((err) => next(err));
 };
 
-
+// авторизация
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
@@ -62,10 +71,10 @@ const login = (req, res, next) => {
         });
       }
     })
-    .catch(() => next(new Unauthorized('Неверный логин или пароль')));
+    .catch(() => next(new Unauthorized('Неправильные почта или пароль')));
 };
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -75,16 +84,11 @@ const updateUser = (req, res) => {
       runValidators: true, // данные будут валидированы перед изменением
     },
   )
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'На сервере произошла ошибка' });
-    });
+    .then((user) => res.send(user))
+    .catch((err) => next(err));
 };
 
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -94,13 +98,8 @@ const updateAvatar = (req, res) => {
       runValidators: true, // данные будут валидированы перед изменение
     },
   )
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'На сервере произошла ошибка' });
-    });
+    .then((user) => res.send(user))
+    .catch((err) => next(err));
 };
 
 module.exports = {

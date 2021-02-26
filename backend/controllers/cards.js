@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const Card = require('../models/card');
-const { NotFoundError, BadRequest, ForbiddenError } = require('../errors/errors');
+const { NotFoundError, BadRequest, ForbiddenError } = require('../errors/allErrors');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -15,20 +15,20 @@ const postCards = (req, res, next) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные');
+        next(new BadRequest('Переданы некорректные данные'));
       }
-    })
-    .catch((err) => next(err));
+      next(err);
+    });
 };
 
 const deleteCards = (req, res, next) => {
   const { cardId } = req.params;
   const owner = req.user._id;
   Card.findById(cardId)
-    .orFail(() => { throw new NotFoundError('Карточка не найдена'); })
+    .orFail(() => { throw new NotFoundError('Нет карточки c таким id'); })
     .then((card) => {
       if (card.owner.toString() !== owner) {
-        throw new ForbiddenError('Вы не можете удалить карточку');
+        throw new ForbiddenError('Нельзя удалить чужую карточку');
       }
       return Card.findByIdAndRemove(cardId);
     })
@@ -50,8 +50,7 @@ const likeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        const er = new BadRequest('Запрос неправильно сформирован');
-        return next(er);
+        next(new BadRequest('Переданы некорректные данные'));
       }
       return next(err);
     });
@@ -71,8 +70,7 @@ const dislikeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        const er = new BadRequest('Запрос неправильно сформирован');
-        return next(er);
+        next(new BadRequest('Переданы некорректные данные'));
       }
       return next(err);
     });

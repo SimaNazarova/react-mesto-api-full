@@ -16,14 +16,11 @@ const app = express();
 const { PORT = 3000 } = process.env;
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/mydb', {
+mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
 });
-
-// eslint-disable-next-line no-console
-// mongoose.connection.on('open', () => console.log('DB is connected'));
 
 app.use(cors());
 
@@ -38,13 +35,12 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-
+// роуты
 app.post('/signup', userRegister, createUser);
 app.post('/signin', userValidation, login);
 
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
-
 
 app.use(errorLogger);
 app.use(errors());

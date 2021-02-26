@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
-const { BadRequest } = require('../errors/errors');
+const { BadRequest } = require('../errors/allErrors');
 
 const userValidation = celebrate({
   body: Joi.object().keys({
