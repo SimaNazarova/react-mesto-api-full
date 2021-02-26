@@ -1,4 +1,4 @@
-export const BASE_URL = "http://api.sima.nazarova.students.nomoreparties.space";
+export const BASE_URL = "https://api.sima.nazarova.students.nomoreparties.space";
 
 
 const checkResponse = (response) =>
