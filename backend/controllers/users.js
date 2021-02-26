@@ -81,7 +81,7 @@ const updateUser = (req, res) => {
       runValidators: true, // данные будут валидированы перед изменением
     },
   )
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Переданы некорректные данные' });
@@ -100,7 +100,7 @@ const updateAvatar = (req, res) => {
       runValidators: true, // данные будут валидированы перед изменение
     },
   )
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Переданы некорректные данные' });
