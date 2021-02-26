@@ -20,7 +20,6 @@ mongoose.connect('mongodb://localhost:27017/mydb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
-  useUnifiedTopology: true,
 });
 
 // eslint-disable-next-line no-console
