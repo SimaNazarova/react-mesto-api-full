@@ -121,7 +121,6 @@ function App() {
       .then((res) => {
         if (res.email) {
           handleInfoTooltipClick();
-          setLoggedIn(true);
           history.push("/sign-in");
           setLogo(logoSuccess);
           setMessage("Вы успешно зарегистрировались!");
