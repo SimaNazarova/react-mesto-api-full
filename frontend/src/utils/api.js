@@ -15,9 +15,11 @@ class Api {
   //Загрузка информацию о пользователе
   getUserInfo() {
     return fetch(this._baseUrl + "/users/me", {
+      method: "GET",
       headers: {
-        authorization: this._headers,
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+      }
     }).then(this._statusJson);
   }
 
@@ -25,8 +27,9 @@ class Api {
   getInitialCards() {
     return fetch(this._baseUrl + "/cards", {
       headers: {
-        authorization: this._headers,
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+      }
     }).then(this._statusJson);
   }
 
@@ -35,13 +38,13 @@ class Api {
     return fetch(this._baseUrl + "/users/me", {
       method: "PATCH",
       headers: {
-        authorization: this._headers,
-        "Content-type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
       },
       body: JSON.stringify({
         name: userInfo.name,
         about: userInfo.about,
-      }),
+      }), 
     }).then(this._statusJson);
   }
 
@@ -50,8 +53,8 @@ class Api {
     return fetch(this._baseUrl + "/cards", {
       method: "POST",
       headers: {
-        authorization: this._headers,
-        "Content-type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
       },
       body: JSON.stringify({
         name: cardInfo.name,
@@ -62,21 +65,23 @@ class Api {
 
   //Отображение количества лайков
   putLike(cardId) {
-    return fetch(this._baseUrl + "/cards/likes/" + cardId, {
+    return fetch(this._baseUrl + "/cards/" + cardId + "/likes", {
       method: "PUT",
       headers: {
-        authorization: this._headers,
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+      }
     }).then(this._statusJson);
   }
 
   //Удаление лайка
   deleteLike(cardId) {
-    return fetch(this._baseUrl + "/cards/likes/" + cardId, {
+    return fetch(this._baseUrl + "/cards/" + cardId + "/likes", {
       method: "DELETE",
       headers: {
-        authorization: this._headers,
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+      }
     }).then(this._statusJson);
   }
 
@@ -85,8 +90,9 @@ class Api {
     return fetch(this._baseUrl + "/cards/" + cardId, {
       method: "DELETE",
       headers: {
-        authorization: this._headers,
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+      }
     }).then(this._statusJson);
   }
 
@@ -95,8 +101,8 @@ class Api {
     return fetch(this._baseUrl + "/users/me/avatar", {
       method: "PATCH",
       headers: {
-        authorization: this._headers,
-        "Content-type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
       },
       body: JSON.stringify({
         avatar: avatar,
@@ -107,10 +113,6 @@ class Api {
 
 const api = new Api({
   baseUrl: "http://api.sima.nazarova.students.nomoreparties.space",
-  headers: {
-     authorization: `Bearer ${localStorage.getItem("token")}`,
-    "Content-Type": "application/json",
-  },
 });
 
 export default api;

@@ -25,7 +25,16 @@ import logoSuccess from "../images/Union.svg";
 import logoError from "../images/logoError.svg";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({});
+
+  const history = useHistory();
+
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const [userEmail, setUserEmail] = useState({
+    email: "",
+  });
+
+  const [currentUser, editUserInfo] = useState({});
   const [cards, setCards] = useState([]);
 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -71,40 +80,62 @@ function App() {
 
   const [isLoadingButton, setIsLoadingButton] = useState(false);
 
-  const [loggedIn, setLoggedIn] = useState(false);
 
-  const [userEmail, setUserEmail] = useState("");
-
-  const history = useHistory();
-
+// проверка токена
   useEffect(() => {
-    tokenCheck();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  //проверка токена
-  const tokenCheck = () => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      auth
-        .getContent(token)
-        .then((res) => {
-          if (res.data.email) {
-            setLoggedIn(true);
-            history.push("/");
-            setUserEmail(res.data.email);
-          }
-        })
-        .catch((err) => {
-          if (err === "400") {
-            return console.log("Токен не передан или передан не в том формате");
-          }
-
-          if (err === "401") {
-            return console.log("Переданный токен некорректен ");
-          }
-        });
+    function tokenCheck() {
+      if (localStorage.getItem("jwt")) {
+        const jwt = localStorage.getItem("jwt");
+        if (jwt) {
+          return auth
+            .getContent(jwt)
+            .then((res) => {
+              if (res) {
+                setLoggedIn(true);
+                history.push("/");
+                const userData = {
+                  email: res.email,
+                };
+                setUserEmail(userData);
+              }
+            })
+            .catch((err) => {
+              if (err === "400") {
+                return console.log("Токен не передан или передан не в том формате");
+            }
+            
+            if (err === "401") {
+              return console.log("Переданный токен некорректен ");
+                }
+          });
+        }
+      }
     }
+    tokenCheck();
+  }, [history]);
+
+  //регистрация
+  const handleRegister = (email, password) => {
+    auth
+      .register(email, password)
+      .then((res) => {
+        if (res.email) {
+          handleInfoTooltipClick();
+          setLoggedIn(true);
+          history.push("/sign-in");
+          setLogo(logoSuccess);
+          setMessage("Вы успешно зарегистрировались!");
+        }
+      })
+      .catch((err) => {
+        handleInfoTooltipClick();
+        setLogo(logoError);
+        setMessage("Что-то пошло не так! Попробуйте ещё раз.");
+
+        if (err === "400") {
+          return console.log("некорректно заполнено одно из полей ");
+        }
+      });
   };
 
   //авторизация
@@ -116,7 +147,11 @@ function App() {
           localStorage.setItem("jwt", res.token);
           setLoggedIn(true);
           history.push("/");
-          setUserEmail(email);
+          setUserEmail({
+            email: email,
+          });
+          console.log(res.token)
+          
         }
       })
       .catch((err) => {
@@ -137,45 +172,26 @@ function App() {
     setLoggedIn(false);
   };
 
-  //регистрация
-  const handleRegister = (email, password) => {
-    auth
-      .register(email, password)
-      .then((res) => {
-        if (res.data.email) {
-          setLoggedIn(true);
-          history.push("/sign-in");
-          handleInfoTooltipClick();
-          setLogo(logoSuccess);
-          setMessage("Вы успешно зарегистрировались!");
-        }
-      })
-      .catch((err) => {
-        handleInfoTooltipClick();
-        setLogo(logoError);
-        setMessage("Что-то пошло не так! Попробуйте ещё раз.");
-
-        if (err === "400") {
-          return console.log("некорректно заполнено одно из полей ");
-        }
-      });
-  };
 
   //загрузка карточек и данных юзера
   useEffect(() => {
-    Promise.all([api.getInitialCards(), api.getUserInfo()])
+    if(loggedIn) 
+    {
+      Promise.all([api.getInitialCards(), api.getUserInfo()])
       .then(([cards, user]) => {
-        setCards(cards);
-        setCurrentUser(user);
+        editUserInfo(user);
+        setCards(cards.reverse());
       })
       .catch((err) => {
         console.log("Произошла ошибка:", err);
       });
-  }, []);
+    } 
+  }, [loggedIn]) ;
+  
 
   //поставновка и удаление лайка
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     if (!isLiked) {
       api
@@ -219,9 +235,8 @@ function App() {
     api
       .editUserInfo(userInfo)
       .then((res) => {
-        setCurrentUser(res);
+        editUserInfo(res);
       })
-
       .catch((err) => {
         console.log("Произошла ошибка:", err);
       })
@@ -257,7 +272,7 @@ function App() {
     api
       .updateUserAvatar(avatar)
       .then((res) => {
-        setCurrentUser(res);
+        editUserInfo(res);
       })
 
       .catch((err) => {
@@ -278,7 +293,7 @@ function App() {
             <Header
               handleSignOut={handleSignOut}
               loggedIn={loggedIn}
-              userEmail={userEmail}
+              userEmail={userEmail.email}
             />
             <Switch>
               <ProtectedRoute
@@ -295,7 +310,7 @@ function App() {
                 cards={cards}
               />
               <Route path="/sign-in">
-                <Login onLogin={handleLogin} tokenCheck={tokenCheck} />
+                <Login onLogin={handleLogin} />
               </Route>
               <Route path="/sign-up">
                 <Register

@@ -2,7 +2,6 @@ import vector from "../images/Vector.svg";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Card from "./Card";
 import React from "react";
-
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
 
