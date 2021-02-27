@@ -36,8 +36,42 @@ const userRegister = celebrate({
   }),
 });
 
+const avatarValidation = celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().custom((link) => {
+      if (!validator.isURL(link)) {
+        throw new BadRequest('Некорректная ссылка');
+      }
+      return link;
+    }),
+  }),
+});
+
+const currentUserValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30),
+  }),
+});
+
+const userIdValidation = celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().length(24).hex(),
+  }),
+});
+
+const cardIdValidation = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex(),
+  }),
+});
+
 module.exports = {
   userValidation,
   cardValidation,
   userRegister,
+  avatarValidation,
+  currentUserValidation,
+  userIdValidation,
+  cardIdValidation,
 };

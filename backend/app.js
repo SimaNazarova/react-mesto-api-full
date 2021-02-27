@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -10,6 +11,8 @@ const cardsRouter = require('./routes/cards');
 const { login, createUser } = require('./controllers/users.js');
 const errorHandler = require('./middlewares/errorHandler');
 const { userValidation, userRegister } = require('./middlewares/validation');
+const { NotFoundError } = require('./errors/allErrors');
+
 require('dotenv').config();
 
 const app = express();
@@ -45,8 +48,9 @@ app.use('/cards', auth, cardsRouter);
 app.use(errorLogger);
 app.use(errors());
 
+// спасибо за совет и материалы - пригодится!
 app.use('*', (req, res) => {
-  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+  throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
 
 app.use(errorHandler);

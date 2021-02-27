@@ -21,8 +21,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator(v) {
-        const regex = /^https?:\/{2}(w{3}\.)?([\w.-\W]{1,})(\.)([a-z]{2,6})(\/?)([\w-.\W]*)/gi;
-        return regex.test(v);
+        return validator.isURL(v);
       },
       message: 'Некорректная ссылка',
     },
@@ -63,7 +62,7 @@ function findUserByCredentials(email, password) {
           return user;
         });
     });
-};
+}
 
 userSchema.plugin(uniqueValidator);
 userSchema.statics.findUserByCredentials = findUserByCredentials;
