@@ -42,6 +42,7 @@ const Login = ({ onLogin }) => {
           onChange={handleChange}
           name="password"
           value={data.password}
+          minlength="6"
         />
         <button className="auth__button">Войти</button>
       </form>

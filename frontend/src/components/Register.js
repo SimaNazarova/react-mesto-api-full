@@ -41,6 +41,7 @@ const Register = ({ onRegister }) => {
           placeholder="Пароль"
           type="password"
           onChange={handleChange}
+          minlength="6"
           required
         />
         <button className="auth__button" type="submit">
