@@ -5,6 +5,9 @@
 **Ссылка на сайт**
 https://sn.mesto.students.nomoredomains.icu
 
+**Ссылка на API**
+https://api.sn.mesto.students.nomoredomains.icu
+
 **Публичный IP сервера**
 130.193.59.36
 
